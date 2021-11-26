@@ -5,6 +5,113 @@ import web3 from './web3';
 // to manage the copy of the contract
 import lottery from "./lottery";
 import Message from "./Message";
+import styled from "styled-components";
+
+
+//styled components
+
+const AppContainer = styled.div `
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  
+`;
+
+const Title = styled.h1`
+    font-family: 'Bai Jamjuree', sans-serif;
+    font-size: 8vw;
+    text-align: center;
+    letter-spacing: 2px;
+
+`;
+
+const AppContent = styled.div`
+  padding-bottom: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+`;
+
+const Text = styled.h1 `
+    font-family: 'Bai Jamjuree', sans-serif;
+    font-size: 5vw;
+    text-align: center;
+    letter-spacing: 2px;
+`;
+
+
+const Info = styled.p`
+    font-size: 30px;
+    max-width: 900px;
+    text-align: center;
+    line-height: 50px;
+    letter-spacing: 1px;
+    font-weight: 400;
+    padding-bottom: 50px;
+`;
+
+const Span = styled.span`
+    font-size: 25px;
+    font-weight: 700;
+`;
+
+const Wrapper = styled.div` 
+    max-width: 500px;
+    width: 100%;
+    padding: 50px;
+    border: 20px solid #dce7ff;
+`;
+
+const Form = styled.form`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  
+`;
+
+const FromControl = styled.div`
+    width: 100%;
+    margin: 0px 0px 30px 0px;
+`;
+
+const Label = styled.label`
+    display: block;
+    margin-bottom: 12px;
+    font-size: 17px;
+    letter-spacing: 1px;
+    text-align: center;
+`;
+
+const Input = styled.input`
+    width: 100%;
+    padding: 8px;
+    font-weight: 400;
+    color: #000;
+    font-family: inherit;
+    border: 2px solid teal;
+    letter-spacing: 1px;
+`;
+
+const Button = styled.button`
+    height: 45px;
+    width: 90px;
+    margin-top: 15px;
+    background-color: #fff;
+    border: none;
+    color: #000;
+    font-family: inherit;
+    letter-spacing: 1px;
+    cursor: pointer;
+    font-weight: 600;
+
+`;
+
+
+
+
 
 function App() {
   web3.eth.getAccounts().then(console.log)
@@ -72,30 +179,43 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <h1>Hello</h1>
-      <h2>This contract is manager by {manager}, There are currently {players.length} players entered, to win {web3.utils.fromWei(balance, "ether")} Ether</h2>
+    <AppContainer>
+      <Title>Welcome To This Lottery</Title>
 
-      <form onSubmit={submitEther} >
-        <h3>Try your luck buddy !</h3>
-          <div className="form-control">
-            <label> Enter Ether</label>
-            <input
-            className="ether-input"
-            value={ether}
-            onChange={(e)=> setEther(e.target.value)}
-            />
-          </div>
-          <button type="submit">Send it </button>
-      </form>
+      <AppContent> 
+
+      <Info>The address of the manager of this lottery : "<Span>{manager}</Span>" <br/> There are currently "<Span>{players.length}</Span>" players entered, to win "<Span>{web3.utils.fromWei(balance, "ether")}</Span>" Ether. <br/></Info>
+
+      <Text>Rules</Text>
+
+      <Info>
+      - You should be connected to your Metamask Wallet <br/>
+      - The minimum amount to send is 0.01 Ether <br/>
+      - The winner will be displayed on the website in 10 days <br/>
+      - Good Luck 
+      </Info>
+      
+      <Wrapper>
+        <Form onSubmit={submitEther} >
+            <FromControl className="form-control">
+              <Label> Enter Ether</Label>
+              <Input
+              className="ether-input"
+              value={ether}
+              onChange={(e)=> setEther(e.target.value)}
+              />
+            </FromControl>
+            <Button type="submit">Send it </Button>
+        </Form>
+      </Wrapper>
       {message.show &&  <Message {...message}/>}
 
       <div className="winner">
         <h2>Pick a winner !</h2>
         <button onClick={winnerHandler}>Pick a winner</button>
       </div>
-
-    </div>
+      </AppContent>
+    </AppContainer>
   );
 }
 
