@@ -18,8 +18,8 @@ const AppContainer = styled.div `
 `;
 
 const Title = styled.h1`
-    font-family: 'Bai Jamjuree', sans-serif;
-    font-size: 8vw;
+    font-family: "Bai Jamjuree", sans-serif;
+    font-size: ${props => props.primarySize ? "8vw" : "5vw"};
     text-align: center;
     letter-spacing: 2px;
 
@@ -32,13 +32,6 @@ const AppContent = styled.div`
   align-items: center;
   flex-direction: column;
 
-`;
-
-const Text = styled.h1 `
-    font-family: 'Bai Jamjuree', sans-serif;
-    font-size: 5vw;
-    text-align: center;
-    letter-spacing: 2px;
 `;
 
 
@@ -62,6 +55,8 @@ const Wrapper = styled.div`
     width: 100%;
     padding: 50px;
     border: 20px solid #dce7ff;
+    margin-top: ${props => props.marginTop ? "50px" : "0px"};
+    
 `;
 
 const Form = styled.form`
@@ -77,13 +72,6 @@ const FromControl = styled.div`
     margin: 0px 0px 30px 0px;
 `;
 
-const Label = styled.label`
-    display: block;
-    margin-bottom: 12px;
-    font-size: 17px;
-    letter-spacing: 1px;
-    text-align: center;
-`;
 
 const Input = styled.input`
     width: 100%;
@@ -93,11 +81,13 @@ const Input = styled.input`
     font-family: inherit;
     border: 2px solid teal;
     letter-spacing: 1px;
+    font-size: 15px;
+    font-weight: 600;
 `;
 
 const Button = styled.button`
-    height: 45px;
-    width: 90px;
+    height: 37px;
+    width: ${props => props.widthBtn ? "136px" : "80px"};
     margin-top: 15px;
     background-color: #fff;
     border: none;
@@ -106,10 +96,30 @@ const Button = styled.button`
     letter-spacing: 1px;
     cursor: pointer;
     font-weight: 600;
+    transition: all 0.5s ease-in-out;
+    font-weight: 700;
+
+    &:hover {
+      background-color: #dce7ff;
+      letter-spacing: 2px;
+    }
 
 `;
 
+const WinnerContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
+`;
+
+const FormTitle = styled.h2`
+    font-size: 5vw;
+    font-family: "Bai Jamjuree", sans-serif;
+    text-align: center;
+
+`;
 
 
 
@@ -180,13 +190,13 @@ function App() {
 
   return (
     <AppContainer>
-      <Title>Welcome To This Lottery</Title>
+      <Title primarySize>Decentralized Lottery On the Ethereum blockchain</Title>
 
       <AppContent> 
 
       <Info>The address of the manager of this lottery : "<Span>{manager}</Span>" <br/> There are currently "<Span>{players.length}</Span>" players entered, to win "<Span>{web3.utils.fromWei(balance, "ether")}</Span>" Ether. <br/></Info>
 
-      <Text>Rules</Text>
+      <Title>Rules</Title>
 
       <Info>
       - You should be connected to your Metamask Wallet <br/>
@@ -198,7 +208,7 @@ function App() {
       <Wrapper>
         <Form onSubmit={submitEther} >
             <FromControl className="form-control">
-              <Label> Enter Ether</Label>
+              <FormTitle> Enter Ether</FormTitle>
               <Input
               className="ether-input"
               value={ether}
@@ -210,10 +220,12 @@ function App() {
       </Wrapper>
       {message.show &&  <Message {...message}/>}
 
-      <div className="winner">
-        <h2>Pick a winner !</h2>
-        <button onClick={winnerHandler}>Pick a winner</button>
-      </div>
+      <Wrapper marginTop>
+      <WinnerContainer>
+        <FormTitle>Pick a winner !</FormTitle>
+        <Button widthBtn onClick={winnerHandler}>Pick a winner</Button>
+      </WinnerContainer>
+      </Wrapper>
       </AppContent>
     </AppContainer>
   );
