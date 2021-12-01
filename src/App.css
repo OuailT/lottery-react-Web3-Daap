@@ -12,6 +12,14 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  
 }
+
+
+.LineChildren {
+  transform: translate(0, 500px);
+}
+
+.LineParents {
+ overflow: hidden; 
+} 
 

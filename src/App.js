@@ -6,6 +6,8 @@ import web3 from './web3';
 import lottery from "./lottery";
 import Message from "./Message";
 import styled from "styled-components";
+import gsap from "gsap";
+import SplitText from "./Utilis/split3.min";
 
 
 //styled components
@@ -19,9 +21,10 @@ const AppContainer = styled.div `
 
 const Title = styled.h1`
     font-family: "Bai Jamjuree", sans-serif;
-    font-size: ${props => props.primarySize ? "8vw" : "5vw"};
+    font-size: ${props => props.primarySize ? "8.5vw" : "5vw"};
     text-align: center;
     letter-spacing: 2px;
+    margin-top: 30px;
 
 `;
 
@@ -147,6 +150,27 @@ function App() {
 
   },[]);
 
+  // For Split text Effect
+  useEffect(()=> {
+    const split = new SplitText("#text-Header", {
+        type: "lines",
+        linesClass: "LineChildren",
+    });
+
+    const splitParent = new SplitText("#text-Header", {
+        type: "lines",
+        linesClass: "LineParents",
+    });
+
+    gsap.to(split.lines, {
+        duration: 1.50,
+        y: 0,
+        opacity: 1,
+        stagger:0.1,
+        ease:"power2",
+    })
+},[])
+
   // Show Message Function 
   const ShowMessage = (show = false, msg = "", type = "") => {
         setMessage({show : show, msg : msg, type: type})
@@ -190,7 +214,7 @@ function App() {
 
   return (
     <AppContainer>
-      <Title primarySize>Decentralized Lottery On the Ethereum blockchain</Title>
+      <Title primarySize id="text-Header">Decentralized Lottery On the Ethereum blockchain</Title>
 
       <AppContent> 
 
