@@ -8,6 +8,8 @@ import Message from "./Message";
 import styled from "styled-components";
 import gsap from "gsap";
 import SplitText from "./Utilis/split3.min";
+import { useWeb3React } from "@web3-react/core";
+import { injected } from "./components/Wallet/connector";
 
 
 //styled components
@@ -171,6 +173,9 @@ function App() {
     })
 },[])
 
+
+
+
   // Show Message Function 
   const ShowMessage = (show = false, msg = "", type = "") => {
         setMessage({show : show, msg : msg, type: type})
@@ -212,8 +217,35 @@ function App() {
 
   }
 
+  const { active, account, library, connector, activate, deactivate } = useWeb3React();
+
+
+  // Connect to metamask
+  const Connect = async () => {
+    try {
+     await activate(injected);
+     
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
+  // disconnect Metamask
+  const disconnect = () => {
+    try{
+      deactivate()
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
+
   return (
     <AppContainer>
+      <Button widthBtn onClick={Connect}>Connect to Wallet</Button>
+      {active ? <span>your're connected at {account}</span> :  <span>you are not</span>}
+
+
       <Title primarySize id="text-Header">Decentralized Lottery On the Ethereum blockchain</Title>
 
       <AppContent> 
@@ -226,7 +258,7 @@ function App() {
       - You should be connected to your Metamask Wallet <br/>
       - The minimum amount to send is 0.01 Ether <br/>
       - The winner will be displayed on the website in 10 days <br/>
-      - Good Luck 
+      - Good Luck
       </Info>
       
       <Wrapper>
