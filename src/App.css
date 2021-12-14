@@ -9,10 +9,13 @@ body {
   background-color: #020202;
   color: #fff;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
 }
+
+main {
+  padding: 0 5vw;
+}
+    
 
 
 .LineChildren {

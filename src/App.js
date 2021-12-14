@@ -10,6 +10,7 @@ import gsap from "gsap";
 import SplitText from "./Utilis/split3.min";
 import { useWeb3React } from "@web3-react/core";
 import { injected } from "./components/Wallet/connector";
+import FormSend from "./components/Form/FormSend";
 
 
 //styled components
@@ -23,77 +24,97 @@ const AppContainer = styled.div `
 
 const Title = styled.h1`
     font-family: "Bai Jamjuree", sans-serif;
-    font-size: ${props => props.primarySize ? "8.5vw" : "5vw"};
+    font-size: ${props => props.primarySize ? "7.5vw" : "5vw"};
     text-align: center;
     letter-spacing: 2px;
     margin-top: 30px;
 
 `;
 
+const Logo = styled.h2`
+    font-family: "Bai Jamjuree", sans-serif;
+    font-size: 30px;
+    text-align: center;
+    letter-spacing: 2px;
+    cursor: pointer;
+`;
+
 const AppContent = styled.div`
-  padding-bottom: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-
 `;
 
 
 const Info = styled.p`
     font-size: 30px;
-    max-width: 900px;
     text-align: center;
-    line-height: 50px;
+    line-height: 55px;
     letter-spacing: 1px;
     font-weight: 400;
     padding-bottom: 50px;
+
+    @media (max-width: 768px) {
+      font-size: 20px;
+    }
+
+    @media (max-width: 640px) {
+      font-size: 15px;
+      line-height: 38px;
+    }
+
+    @media (max-width: 425px) {
+      font-size: 12px;
+      line-height: 32px;
+    }
 `;
 
-const Span = styled.span`
-    font-size: 25px;
-    font-weight: 700;
-`;
 
-const Wrapper = styled.div` 
+
+const WrapperForm = styled.div` 
     max-width: 500px;
     width: 100%;
     padding: 50px;
     border: 20px solid #dce7ff;
     margin-top: ${props => props.marginTop ? "50px" : "0px"};
-    
+    margin-bottom : ${props => props.marginBottom ? "50px" : "0px"};
+
+    @media (max-width: 768px) {
+        max-width: 300px;
+    }
+
+    @media (max-width: 425px) {
+      max-width: 200px;
+    }
 `;
 
-const Form = styled.form`
+const Content = styled.div`
+    width: 100%;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-  
+
+    @media (max-width: 768px) {
+      max-width: 500px;
+    }
 `;
 
-const FromControl = styled.div`
-    width: 100%;
-    margin: 0px 0px 30px 0px;
-`;
 
 
-const Input = styled.input`
-    width: 100%;
-    padding: 8px;
-    font-weight: 400;
-    color: #000;
-    font-family: inherit;
-    border: 2px solid teal;
-    letter-spacing: 1px;
-    font-size: 15px;
-    font-weight: 600;
+const FormTitle = styled.h2`
+    font-size: 5vw;
+    font-family: "Bai Jamjuree", sans-serif;
+    text-align: center;
+
 `;
 
 const Button = styled.button`
-    height: 37px;
-    width: ${props => props.widthBtn ? "136px" : "80px"};
-    margin-top: 15px;
+    height: ${props => props.hightBtn ? "40px" : "35px"};
+    width: ${props => props.widthBtn ? "180px" : "80px"};
+    margin-top: ${props => props.marginTOP ? "20px" : "15px"};
     background-color: #fff;
     border: none;
     color: #000;
@@ -119,12 +140,20 @@ const WinnerContainer = styled.div`
 
 `;
 
-const FormTitle = styled.h2`
-    font-size: 5vw;
-    font-family: "Bai Jamjuree", sans-serif;
-    text-align: center;
 
+const Navbar = styled.div`
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+
+      
+      
 `;
+
+const Right = styled.div``;
+
+const Left = styled.div``;
 
 
 
@@ -134,8 +163,8 @@ function App() {
   const [manager , setManager] = useState("");
   const [players, setPlayers] = useState([]);
   const [balance, setBalance] = useState("");
-  const [ether, setEther] = useState("");
   const [message, setMessage] = useState({show: false, msg: "", type:""});
+  const [ether, setEther] = useState("");
 
   useEffect(()=> {
     const fetch = async () => {
@@ -230,27 +259,32 @@ function App() {
     }
   }
 
-  // disconnect Metamask
-  const disconnect = () => {
-    try{
-      deactivate()
-    } catch(err) {
-      console.log(err)
-    }
-  }
-
+  console.log(players.length, manager);
 
   return (
+
+    <main>
+    <Navbar>
+        <Left>
+          <Logo>LTR</Logo>
+        </Left>
+          <Right>
+          {active ? <Button widthBtn hightBtn >{account.substring(0,13)}...</Button> :
+           <Button widthBtn hightBtn  onClick={Connect}>Connect MetaMask</Button>} 
+          </Right>
+      </Navbar>
+
     <AppContainer>
-      <Button widthBtn onClick={Connect}>Connect to Wallet</Button>
-      {active ? <span>your're connected at {account}</span> :  <span>you are not</span>}
-
-
       <Title primarySize id="text-Header">Decentralized Lottery On the Ethereum blockchain</Title>
 
       <AppContent> 
 
-      <Info>The address of the manager of this lottery : "<Span>{manager}</Span>" <br/> There are currently "<Span>{players.length}</Span>" players entered, to win "<Span>{web3.utils.fromWei(balance, "ether")}</Span>" Ether. <br/></Info>
+      <Content>
+      <Info>
+      - The address of the manager of this lottery : "{manager}" <br/>
+      - There are currently "{players.length}" players entered <br/>
+      - To win {web3.utils.fromWei(balance, "ether")} Ether. <br/>
+      </Info>
 
       <Title>Rules</Title>
 
@@ -260,67 +294,32 @@ function App() {
       - The winner will be displayed on the website in 10 days <br/>
       - Good Luck
       </Info>
+
       
-      <Wrapper>
-        <Form onSubmit={submitEther} >
-            <FromControl className="form-control">
-              <FormTitle> Enter Ether</FormTitle>
-              <Input
-              className="ether-input"
-              value={ether}
-              onChange={(e)=> setEther(e.target.value)}
-              />
-            </FromControl>
-            <Button type="submit">Send it </Button>
-        </Form>
-      </Wrapper>
+
+      </Content>
+      
+      <WrapperForm>
+       <FormSend submitEther={submitEther} ether={ether} setEther={setEther}/> 
+      </WrapperForm>
       {message.show &&  <Message {...message}/>}
 
-      <Wrapper marginTop>
+      <WrapperForm marginTop marginBottom>
       <WinnerContainer>
         <FormTitle>Pick a winner !</FormTitle>
         <Button widthBtn onClick={winnerHandler}>Pick a winner</Button>
       </WinnerContainer>
-      </Wrapper>
+      </WrapperForm>
+      
       </AppContent>
     </AppContainer>
+    </main>
   );
 }
 
 export default App;
 
 
-
-
-// class components 
-// class app extends component {
-
-//   constructor(props) {
-//     super(props);
-//     this.state = {manager : ""}, 
-//     this.state = {players : []},
-//     this.state= { balance : ""}
-//   }
-
-//   async componentDidMount() {
-//     const manager = await lottery.methods.manager().call();
-//     const players = await lottery.methods.players().call();
-//     const balance = await web3.eth.getBalance(lottery.options.address);
-//     this.setState = {{manager : manager,
-//                        players : players,
-//                         balance : balance}};
-//   }
-
-//   render() {
-//     return (
-//       <h1>Hello world</h1>
-//       <p> The lottery is managed by {this.state.manager} 
-//           there are {this.state.players.length} participating for now, the balance of the lottery is {web3.eth.fromWei(this.state.balance, "ether")}
-      
-//     </p>
-//     )
-//   }
-// }
 
 
 
