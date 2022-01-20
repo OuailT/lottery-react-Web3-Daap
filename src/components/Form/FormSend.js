@@ -59,7 +59,11 @@ const FormTitle = styled.h2`
 
 `;
 
+
+
 const FormSend = ({submitEther, ether, setEther}) => {
+
+
     return (
         <Form onSubmit={submitEther} >
             <FromControl className="form-control">

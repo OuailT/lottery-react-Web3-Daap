@@ -11,6 +11,7 @@ import SplitText from "./Utilis/split3.min";
 import { useWeb3React } from "@web3-react/core";
 import { injected } from "./components/Wallet/connector";
 import FormSend from "./components/Form/FormSend";
+import Loading from "./components/Loading/Loading";
 
 
 //styled components
@@ -145,10 +146,7 @@ const Navbar = styled.div`
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 100%;
-
-      
-      
+      width: 100%;  
 `;
 
 const Right = styled.div``;
@@ -158,13 +156,13 @@ const Left = styled.div``;
 
 
 function App() {
-  web3.eth.getAccounts().then(console.log)
 
   const [manager , setManager] = useState("");
   const [players, setPlayers] = useState([]);
   const [balance, setBalance] = useState("");
   const [message, setMessage] = useState({show: false, msg: "", type:""});
   const [ether, setEther] = useState("");
+
 
   useEffect(()=> {
     const fetch = async () => {
@@ -206,7 +204,7 @@ function App() {
 
 
   // Show Message Function 
-  const ShowMessage = (show = false, msg = "", type = "") => {
+  const ShowAlert = (show = false, msg = "", type = "") => {
         setMessage({show : show, msg : msg, type: type})
   }
 
@@ -214,10 +212,12 @@ function App() {
   // Function to Participate to the lottery by sending some Ether
   const submitEther = async (e) => {
       e.preventDefault();
-
-      // Get Accounts 
       const account = await web3.eth.getAccounts();
-      ShowMessage(true, " Your transaction is processing...", "success")
+
+      if(!ether) {
+        window.alert("Please enter a value");
+      } else {
+      ShowAlert(true, " Your transaction is processing...", "success")
       // Call the enter function from our contract
       // we only send to the contract money with wei unit
       await lottery.methods.enter().send({
@@ -225,7 +225,8 @@ function App() {
         value: web3.utils.toWei(ether, "ether"),
       });
 
-      ShowMessage(true, " Great , You are a part of the Lottery...", "success")
+      ShowAlert(true, " Great , You are a part of the Lottery...", "success")
+    }
   };
 
   // Function to pick a winner
@@ -234,7 +235,7 @@ function App() {
     const account = await web3.eth.getAccounts();
 
     // Leave a message to the winner
-    ShowMessage(true, "Waiting on transaction success...", "success");
+    ShowAlert(true, "Waiting on transaction success...", "success");
 
     // Call the pickWinner function from the contract
     await lottery.methods.pickWinner().send({
@@ -242,7 +243,7 @@ function App() {
     });
 
     // Show Message for success 
-    ShowMessage(true, "A Winner has been Picked", "Success")
+    ShowAlert(true, "A Winner has been Picked", "Success")
 
   }
 
@@ -258,8 +259,6 @@ function App() {
       console.log(err)
     }
   }
-
-  console.log(players.length, manager);
 
   return (
 
@@ -278,6 +277,7 @@ function App() {
       <Title primarySize id="text-Header">Decentralized Lottery On the Ethereum blockchain</Title>
 
       <AppContent> 
+      
 
       <Content>
       <Info>
@@ -289,8 +289,8 @@ function App() {
       <Title>Rules</Title>
 
       <Info>
-      - You should be connected to your Metamask Wallet <br/>
-      - The minimum amount to send is 0.01 Ether <br/>
+      - You should be connected to your Metamask Wallet on the rinkeby network <br/>
+      - The minimum amount to send is 0.01 Ether  <br/>
       - The winner will be displayed on the website in 10 days <br/>
       - Good Luck
       </Info>
@@ -302,7 +302,8 @@ function App() {
       <WrapperForm>
        <FormSend submitEther={submitEther} ether={ether} setEther={setEther}/> 
       </WrapperForm>
-      {message.show &&  <Message {...message}/>}
+      {message.show && <Message {...message} removeAlert={ShowAlert}/>}
+      {message.show && <Loading/>}
 
       <WrapperForm marginTop marginBottom>
       <WinnerContainer>
