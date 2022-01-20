@@ -1,1 +1,1 @@
-##Decentralized lottery app deployed on the rinkeby test network using React and solidity & web3
+#Decentralized lottery app deployed on the rinkeby test network using React and solidity & web3
